@@ -1,6 +1,7 @@
 package com.cloudexpense.auth.controller;
 
 import com.cloudexpense.auth.dto.LoginRequest;
+import com.cloudexpense.auth.dto.LoginResponse;
 import com.cloudexpense.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest request) {
-        authService.login(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(authService.login(request));
     }
 }

@@ -10,6 +10,8 @@ package com.cloudexpense.user.entity;
  * @Version: v1.0
  */
 public enum Role {
+    ADMIN,
+
     EMPLOYEE,
 
     MANAGER,
