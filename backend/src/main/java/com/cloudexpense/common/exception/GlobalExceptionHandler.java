@@ -1,0 +1,27 @@
+package com.cloudexpense.common.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+/**
+ * ClassName: GlobalExceptionHandler
+ * Package: com.cloudexpense.common.exception
+ * Description:
+ *
+ * @Author: Colin
+ * @Create: 2026/7/26 21:08
+ * @Version: v1.0
+ */
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e){
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+    }
+}
