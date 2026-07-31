@@ -52,6 +52,6 @@ public class ReceiptController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         receiptService.delete(id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

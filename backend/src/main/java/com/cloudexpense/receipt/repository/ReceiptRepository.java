@@ -22,4 +22,5 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
     int countByExpenseId(Long expenseId);
 
+    void deleteByExpenseId(Long id);
 }

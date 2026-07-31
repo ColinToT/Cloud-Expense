@@ -4,6 +4,8 @@ import com.cloudexpense.expense.dto.CreateExpenseRequest;
 import com.cloudexpense.expense.dto.ExpenseResponse;
 import com.cloudexpense.expense.dto.UpdateExpenseRequest;
 
+import java.util.List;
+
 /**
  * ClassName: ExpenseService
  * Package: com.cloudexpense.expense.service
@@ -20,4 +22,10 @@ public interface ExpenseService {
     ExpenseResponse getExpense(Long id);
 
     ExpenseResponse updateExpense(Long id, UpdateExpenseRequest request);
+
+    ExpenseResponse submitExpense(Long id);
+
+    List<ExpenseResponse> getMyExpenses();
+
+    void delete(Long id);
 }

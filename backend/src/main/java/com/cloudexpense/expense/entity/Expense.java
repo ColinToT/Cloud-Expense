@@ -4,7 +4,9 @@ import com.cloudexpense.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -61,9 +63,14 @@ public class Expense {
 
     private OffsetDateTime submittedAt;
 
+    @CreationTimestamp
+    @Column(name="created_at", updatable = false)
     private OffsetDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(name="updated_at")
     private OffsetDateTime updatedAt;
 
+    @Column(name="deleted_at")
     private OffsetDateTime deletedAt;
 }

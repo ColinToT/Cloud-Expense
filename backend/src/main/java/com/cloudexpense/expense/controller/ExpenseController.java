@@ -6,7 +6,10 @@ import com.cloudexpense.expense.dto.UpdateExpenseRequest;
 import com.cloudexpense.expense.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * ClassName: ExpenseController
@@ -40,8 +43,23 @@ public class ExpenseController {
             @PathVariable Long id,
             @RequestBody UpdateExpenseRequest request
     ){
-
         return expenseService.updateExpense(id, request);
+    }
+
+    @PostMapping("/{id}/submit")
+    public ExpenseResponse submit(@PathVariable Long id){
+        return expenseService.submitExpense(id);
+    }
+
+    @GetMapping
+    public List<ExpenseResponse> getMyExpenses(){
+        return expenseService.getMyExpenses();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        expenseService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
