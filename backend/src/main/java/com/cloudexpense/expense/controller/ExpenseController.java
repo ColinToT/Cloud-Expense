@@ -1,6 +1,7 @@
 package com.cloudexpense.expense.controller;
 
 import com.cloudexpense.expense.dto.CreateExpenseRequest;
+import com.cloudexpense.expense.dto.ExpenseDetailResponse;
 import com.cloudexpense.expense.dto.ExpenseResponse;
 import com.cloudexpense.expense.dto.UpdateExpenseRequest;
 import com.cloudexpense.expense.service.ExpenseService;
@@ -34,7 +35,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ExpenseResponse getById(@PathVariable Long id){
+    public ExpenseDetailResponse getById(@PathVariable Long id){
         return expenseService.getExpense(id);
     }
 

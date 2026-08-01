@@ -3,12 +3,14 @@ package com.cloudexpense.expense.service.impl;
 import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.common.exception.ResourceNotFoundException;
 import com.cloudexpense.expense.dto.CreateExpenseRequest;
+import com.cloudexpense.expense.dto.ExpenseDetailResponse;
 import com.cloudexpense.expense.dto.ExpenseResponse;
 import com.cloudexpense.expense.dto.UpdateExpenseRequest;
 import com.cloudexpense.expense.entity.Expense;
 import com.cloudexpense.expense.entity.ExpenseStatus;
 import com.cloudexpense.expense.repository.ExpenseRepository;
 import com.cloudexpense.expense.service.ExpenseService;
+import com.cloudexpense.receipt.dto.ReceiptResponse;
 import com.cloudexpense.receipt.repository.ReceiptRepository;
 import com.cloudexpense.user.entity.User;
 import com.cloudexpense.user.service.CurrentUserService;
@@ -63,7 +65,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseResponse getExpense(Long id) {
+    public ExpenseDetailResponse getExpense(Long id) {
         User currentUser = currentUserService.getCurrentUser();
 
         Expense expense =
@@ -77,7 +79,21 @@ public class ExpenseServiceImpl implements ExpenseService {
                                 )
                         );
 
-        return toResponse(expense);
+        List<ReceiptResponse> receipts =
+                receiptRepository
+                        .findAllByExpenseId(id)
+                        .stream()
+                        .map(receipt ->
+                                new ReceiptResponse(
+                                        receipt.getId(),
+                                        receipt.getFileName(),
+                                        receipt.getFileUrl(),
+                                        receipt.getUploadedAt()
+                                )
+                        )
+                        .toList();
+
+        return toDetailResponse(expense, receipts);
     }
 
     @Override
@@ -211,6 +227,25 @@ public class ExpenseServiceImpl implements ExpenseService {
                 expense.getCategoryId(),
                 expense.getExpenseDate(),
                 expense.getStatus().name()
+        );
+    }
+
+    private ExpenseDetailResponse toDetailResponse(
+            Expense expense,
+            List<ReceiptResponse> receipts
+    ) {
+
+        return new ExpenseDetailResponse(
+                expense.getId(),
+                expense.getTitle(),
+                expense.getDescription(),
+                expense.getAmount(),
+                expense.getCurrency(),
+                expense.getCategoryId(),
+                expense.getExpenseDate(),
+                expense.getStatus().name(),
+                expense.getSubmittedAt(),
+                receipts
         );
     }
 }

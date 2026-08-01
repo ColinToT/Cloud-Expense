@@ -1,6 +1,7 @@
 package com.cloudexpense.expense.service;
 
 import com.cloudexpense.expense.dto.CreateExpenseRequest;
+import com.cloudexpense.expense.dto.ExpenseDetailResponse;
 import com.cloudexpense.expense.dto.ExpenseResponse;
 import com.cloudexpense.expense.dto.UpdateExpenseRequest;
 
@@ -19,7 +20,7 @@ public interface ExpenseService {
 
     ExpenseResponse createExpense(CreateExpenseRequest request);
 
-    ExpenseResponse getExpense(Long id);
+    ExpenseDetailResponse getExpense(Long id);
 
     ExpenseResponse updateExpense(Long id, UpdateExpenseRequest request);
 
