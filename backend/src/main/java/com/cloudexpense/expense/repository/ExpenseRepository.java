@@ -1,6 +1,7 @@
 package com.cloudexpense.expense.repository;
 
 import com.cloudexpense.expense.entity.Expense;
+import com.cloudexpense.expense.entity.ExpenseStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -20,4 +21,16 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     Optional<Expense> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
 
     List<Expense> findByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long userId);
+
+    List<Expense> findByStatusAndDeletedAtIsNull(ExpenseStatus pendingStatus);
+
+    Optional<Expense> findByIdAndStatusAndDeletedAtIsNull(Long expenseId, ExpenseStatus status);
+
+    List<Expense> findByUserManagerIdAndStatusAndDeletedAtIsNull(Long id, ExpenseStatus pendingStatus);
+
+    Optional<Expense> findByIdAndUserManagerIdAndStatusAndDeletedAtIsNull(
+            Long expenseId,
+            Long id,
+            ExpenseStatus status
+    );
 }
