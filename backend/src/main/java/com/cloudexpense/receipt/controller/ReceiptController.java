@@ -4,6 +4,7 @@ import com.cloudexpense.receipt.dto.ReceiptResponse;
 import com.cloudexpense.receipt.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,7 @@ public class ReceiptController {
 
     private final ReceiptService receiptService;
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/expenses/{expenseId}/receipts")
     public ResponseEntity<ReceiptResponse> upload(
             @PathVariable Long expenseId,
@@ -34,6 +36,7 @@ public class ReceiptController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/expenses/{expenseId}/receipts")
     public ResponseEntity<List<ReceiptResponse>> findByExpense(
             @PathVariable Long expenseId
@@ -43,6 +46,7 @@ public class ReceiptController {
         );
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @DeleteMapping("/receipts/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         receiptService.delete(id);

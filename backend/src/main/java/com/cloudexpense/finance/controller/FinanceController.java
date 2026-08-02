@@ -5,6 +5,7 @@ import com.cloudexpense.finance.dto.FinanceExpenseResponse;
 import com.cloudexpense.finance.service.FinanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class FinanceController {
 
     private final FinanceService financeService;
 
+    @PreAuthorize("hasRole('FINANCE')")
     @GetMapping("/expenses")
     public ResponseEntity<List<FinanceExpenseResponse>> expenses(){
         return ResponseEntity.ok(
@@ -35,6 +37,7 @@ public class FinanceController {
         );
     }
 
+    @PreAuthorize("hasRole('FINANCE')")
     @GetMapping("/expenses/{id}")
     public ResponseEntity<FinanceExpenseDetailResponse> detail(@PathVariable Long id){
         return ResponseEntity.ok(

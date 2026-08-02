@@ -8,6 +8,7 @@ import com.cloudexpense.expense.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping
     public ResponseEntity<ExpenseResponse> create(@RequestBody CreateExpenseRequest request){
         ExpenseResponse response = expenseService.createExpense(request);
@@ -36,6 +38,7 @@ public class ExpenseController {
                 .body(response);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/{id}")
     public ResponseEntity<ExpenseDetailResponse> getById(@PathVariable Long id){
         return ResponseEntity.ok(
@@ -43,6 +46,7 @@ public class ExpenseController {
         );
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponse> update(
             @PathVariable Long id,
@@ -53,6 +57,7 @@ public class ExpenseController {
         );
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/{id}/submit")
     public ResponseEntity<ExpenseResponse> submit(@PathVariable Long id){
         return ResponseEntity.ok(
@@ -60,6 +65,7 @@ public class ExpenseController {
         );
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping
     public ResponseEntity<List<ExpenseResponse>> getMyExpenses(){
         return ResponseEntity.ok(
@@ -67,6 +73,7 @@ public class ExpenseController {
         );
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         expenseService.delete(id);

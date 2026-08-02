@@ -6,6 +6,7 @@ import com.cloudexpense.approval.dto.PendingApprovalResponse;
 import com.cloudexpense.approval.service.ApprovalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class ApprovalController {
     private final ApprovalService approvalService;
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE')")
     @GetMapping("/pending")
     public ResponseEntity<List<PendingApprovalResponse>> pending(){
         return ResponseEntity.ok(
@@ -32,6 +34,7 @@ public class ApprovalController {
         );
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE')")
     @PostMapping("/{expenseId}/approve")
     public ResponseEntity<Void> approve(
             @PathVariable Long expenseId,
@@ -41,6 +44,7 @@ public class ApprovalController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE')")
     @PostMapping("/{expenseId}/reject")
     public ResponseEntity<Void> reject(
             @PathVariable Long expenseId,
@@ -50,6 +54,7 @@ public class ApprovalController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE') or hasRole('EMPLOYEE')")
     @GetMapping("/{expenseId}/history")
     public ResponseEntity<List<ApprovalHistoryResponse>> history(
             @PathVariable Long expenseId
