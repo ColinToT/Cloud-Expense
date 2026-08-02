@@ -30,12 +30,7 @@ public class ReceiptController {
             @PathVariable Long expenseId,
             @RequestParam("file") MultipartFile file
     ){
-        ReceiptResponse response =
-                receiptService.upload(
-                        expenseId,
-                        file
-                );
-
+        ReceiptResponse response = receiptService.upload(expenseId, file);
         return ResponseEntity.ok(response);
     }
 
@@ -51,7 +46,6 @@ public class ReceiptController {
     @DeleteMapping("/receipts/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         receiptService.delete(id);
-
         return ResponseEntity.noContent().build();
     }
 }

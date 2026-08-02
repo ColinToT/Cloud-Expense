@@ -29,32 +29,42 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ExpenseResponse create(@RequestBody CreateExpenseRequest request){
-        return expenseService.createExpense(request);
+    public ResponseEntity<ExpenseResponse> create(@RequestBody CreateExpenseRequest request){
+        ExpenseResponse response = expenseService.createExpense(request);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/{id}")
-    public ExpenseDetailResponse getById(@PathVariable Long id){
-        return expenseService.getExpense(id);
+    public ResponseEntity<ExpenseDetailResponse> getById(@PathVariable Long id){
+        return ResponseEntity.ok(
+                expenseService.getExpense(id)
+        );
     }
 
     @PutMapping("/{id}")
-    public ExpenseResponse update(
+    public ResponseEntity<ExpenseResponse> update(
             @PathVariable Long id,
             @RequestBody UpdateExpenseRequest request
     ){
-        return expenseService.updateExpense(id, request);
+        return ResponseEntity.ok(
+                expenseService.updateExpense(id, request)
+        );
     }
 
     @PostMapping("/{id}/submit")
-    public ExpenseResponse submit(@PathVariable Long id){
-        return expenseService.submitExpense(id);
+    public ResponseEntity<ExpenseResponse> submit(@PathVariable Long id){
+        return ResponseEntity.ok(
+                expenseService.submitExpense(id)
+        );
     }
 
     @GetMapping
-    public List<ExpenseResponse> getMyExpenses(){
-        return expenseService.getMyExpenses();
+    public ResponseEntity<List<ExpenseResponse>> getMyExpenses(){
+        return ResponseEntity.ok(
+                expenseService.getMyExpenses()
+        );
     }
 
     @DeleteMapping("/{id}")
