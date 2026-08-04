@@ -1,6 +1,7 @@
 package com.cloudexpense.notification.service;
 
 import com.cloudexpense.notification.dto.NotificationResponse;
+import com.cloudexpense.notification.entity.NotificationType;
 
 import java.util.List;
 
@@ -20,4 +21,12 @@ public interface NotificationService {
     void markAsRead(Long id);
 
     long getUnreadCount();
+
+    void create(
+            Long userId,
+            NotificationType type,
+            String title,
+            String message,
+            Long referenceId
+    );
 }

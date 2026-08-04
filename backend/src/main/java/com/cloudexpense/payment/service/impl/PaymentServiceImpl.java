@@ -1,5 +1,6 @@
 package com.cloudexpense.payment.service.impl;
 
+import com.cloudexpense.common.event.PaymentCompletedEvent;
 import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.expense.entity.Expense;
 import com.cloudexpense.expense.entity.ExpenseStatus;
@@ -12,6 +13,7 @@ import com.cloudexpense.payment.service.PaymentService;
 import com.cloudexpense.user.entity.User;
 import com.cloudexpense.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final ExpenseRepository expenseRepository;
     private final PaymentRecordRepository paymentRecordRepository;
     private final CurrentUserService currentUserService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<PendingPaymentResponse> getPendingPayments() {
@@ -96,5 +99,13 @@ public class PaymentServiceImpl implements PaymentService {
 
         expense.setStatus(ExpenseStatus.PAID);
         expenseRepository.save(expense);
+
+        eventPublisher.publishEvent(
+                new PaymentCompletedEvent(
+                        expense.getId(),
+                        expense.getUser().getId(),
+                        expense.getAmount()
+                )
+        );
     }
 }

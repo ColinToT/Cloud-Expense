@@ -8,6 +8,8 @@ import com.cloudexpense.approval.entity.ApprovalRecord;
 import com.cloudexpense.approval.entity.ApprovalStage;
 import com.cloudexpense.approval.repository.ApprovalRecordRepository;
 import com.cloudexpense.approval.service.ApprovalService;
+import com.cloudexpense.common.event.ExpenseApprovedEvent;
+import com.cloudexpense.common.event.ExpenseRejectedEvent;
 import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.expense.entity.Expense;
 import com.cloudexpense.expense.entity.ExpenseStatus;
@@ -16,6 +18,7 @@ import com.cloudexpense.user.entity.Role;
 import com.cloudexpense.user.entity.User;
 import com.cloudexpense.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final ExpenseRepository expenseRepository;
     private final ApprovalRecordRepository approvalRecordRepository;
     private final CurrentUserService currentUserService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<PendingApprovalResponse> getPendingExpenses() {
@@ -87,6 +91,13 @@ public class ApprovalServiceImpl implements ApprovalService {
                 ApprovalAction.APPROVE,
                 request.comment()
         );
+
+        eventPublisher.publishEvent(
+                new ExpenseApprovedEvent(
+                        expense.getId(),
+                        expense.getUser().getId()
+                )
+        );
     }
 
     private ExpenseStatus getApprovedStatus(ApprovalStage stage) {
@@ -121,6 +132,14 @@ public class ApprovalServiceImpl implements ApprovalService {
                 stage,
                 ApprovalAction.REJECT,
                 request.comment()
+        );
+
+        eventPublisher.publishEvent(
+                new ExpenseRejectedEvent(
+                        expense.getId(),
+                        expense.getUser().getId(),
+                        request.comment()
+                )
         );
     }
 

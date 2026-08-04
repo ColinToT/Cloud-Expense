@@ -1,5 +1,6 @@
 package com.cloudexpense.expense.service.impl;
 
+import com.cloudexpense.common.event.ExpenseSubmittedEvent;
 import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.common.exception.ResourceNotFoundException;
 import com.cloudexpense.expense.dto.CreateExpenseRequest;
@@ -15,6 +16,7 @@ import com.cloudexpense.receipt.repository.ReceiptRepository;
 import com.cloudexpense.user.entity.User;
 import com.cloudexpense.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final CurrentUserService currentUserService;
 
     private final ReceiptRepository receiptRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public ExpenseResponse createExpense(CreateExpenseRequest request) {
@@ -138,6 +142,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    @Transactional
     public ExpenseResponse submitExpense(Long id) {
         User currentUser = currentUserService.getCurrentUser();
 
@@ -159,6 +164,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setSubmittedAt(OffsetDateTime.now());
 
         Expense submitted = expenseRepository.save(expense);
+
+        eventPublisher.publishEvent(
+                new ExpenseSubmittedEvent(
+                        expense.getId(),
+                        expense.getUser().getManagerId()
+                )
+        );
+
         return toResponse(submitted);
     }
 

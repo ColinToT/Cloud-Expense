@@ -3,12 +3,16 @@ package com.cloudexpense.notification.service.impl;
 import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.notification.dto.NotificationResponse;
 import com.cloudexpense.notification.entity.Notification;
+import com.cloudexpense.notification.entity.NotificationType;
 import com.cloudexpense.notification.repository.NotificationRepository;
 import com.cloudexpense.notification.service.NotificationService;
 import com.cloudexpense.user.entity.User;
+import com.cloudexpense.user.repository.UserRepository;
 import com.cloudexpense.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +31,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final CurrentUserService currentUserService;
+    private final UserRepository userRepository;
 
     @Override
     public List<NotificationResponse> getMyNotifications() {
@@ -54,9 +59,9 @@ public class NotificationServiceImpl implements NotificationService {
                                 )
                         );
 
-        if(!notification.getUser()
+        if (!notification.getUser()
                 .getId()
-                .equals(user.getId())){
+                .equals(user.getId())) {
 
             throw new BusinessException(
                     "Cannot access this notification"
@@ -77,7 +82,32 @@ public class NotificationServiceImpl implements NotificationService {
                 );
     }
 
-    private NotificationResponse toResponse(Notification notification){
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void create(
+            Long userId,
+            NotificationType type,
+            String title,
+            String message,
+            Long referenceId
+    ) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new BusinessException(
+                                "User not found"
+                        )
+                );
+
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setType(type);
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setReferenceId(referenceId);
+        notificationRepository.save(notification);
+    }
+
+    private NotificationResponse toResponse(Notification notification) {
         return new NotificationResponse(
                 notification.getId(),
                 notification.getType().name(),
