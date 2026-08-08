@@ -54,7 +54,7 @@ public class ApprovalController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE') or hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','MANAGER','FINANCE')")
     @GetMapping("/{expenseId}/history")
     public ResponseEntity<List<ApprovalHistoryResponse>> history(
             @PathVariable Long expenseId
