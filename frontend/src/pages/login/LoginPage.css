@@ -1,0 +1,197 @@
+.login-page {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-columns: minmax(360px, 43%) 1fr;
+  background: #ffffff;
+}
+
+.login-page__hero {
+  display: flex;
+  flex-direction: column;
+  padding: 56px clamp(40px, 6vw, 96px);
+  color: #ffffff;
+  background: linear-gradient(145deg, #3d5a2b, #183013);
+}
+
+.login-page__brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.login-page__brand-mark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  color: #29421d;
+  background: #c7dc70;
+}
+
+.login-page__brand small,
+.login-page__role-content small {
+  display: block;
+  color: #707966;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.login-page__brand small {
+  margin-top: 2px;
+  color: #dbe6d4;
+}
+
+.login-page__hero-copy {
+  max-width: 440px;
+  margin: auto 0;
+}
+
+.login-page__eyebrow {
+  margin-bottom: 8px;
+  color: #8a9b45;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.login-page__hero-title {
+  color: #ffffff !important;
+  font-family: Georgia, serif;
+  font-size: clamp(42px, 4vw, 64px) !important;
+}
+
+.login-page__hero-title span {
+  color: #c7dc70;
+  font-weight: 400;
+}
+
+.login-page__hero-copy > .ant-typography:not(.login-page__eyebrow) {
+  color: #e0e8d8;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.login-page__content {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 28px clamp(32px, 7.6vw, 150px);
+  background: #ffffff;
+}
+
+.login-page__form-panel {
+  width: min(100%, 670px);
+}
+
+.login-page__role-group {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.login-page__role-option {
+  position: relative;
+  display: block !important;
+  min-height: 112px;
+  margin: 0 !important;
+  padding: 14px;
+  border: 1px solid #d8dfd1;
+  border-radius: 8px;
+}
+
+.login-page__role-option .ant-radio {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+
+.login-page__role-option > span:last-child {
+  display: flex;
+  width: 100%;
+  margin: 0 !important;
+  justify-content: center;
+}
+
+.login-page__role-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+}
+
+.login-page__role-content svg {
+  color: #6e7e2d;
+  font-size: 20px;
+}
+
+.login-page__role-content strong {
+  font-size: 15px;
+}
+
+@media (max-width: 760px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page__hero {
+    display: none;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 761px) {
+  html,
+  body,
+  #root,
+  .login-page {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .login-page__hero {
+    padding-top: 5vh;
+    padding-bottom: 4vh;
+  }
+
+  .login-page__hero-title {
+    margin: 8px 0 18px;
+    font-size: 46px !important;
+  }
+
+  .login-page__content {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .login-page__form-panel > h1 {
+    margin: 4px 0 8px;
+    font-size: 40px !important;
+  }
+
+  .login-page__form-panel .ant-form-item {
+    margin-bottom: 8px;
+  }
+
+  .login-page__role-option {
+    min-height: 86px;
+    padding: 10px;
+  }
+
+  .login-page__role-option .ant-radio {
+    top: 10px;
+    left: 10px;
+  }
+
+  .login-page__role-content {
+    gap: 2px;
+  }
+
+  .login-page__role-content svg {
+    font-size: 17px;
+  }
+}

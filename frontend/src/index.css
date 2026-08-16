@@ -4,10 +4,19 @@
   background: #fbfcfa;
 }
 
-body {
-  margin: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-main {
-  padding: 48px;
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
