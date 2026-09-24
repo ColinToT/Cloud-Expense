@@ -87,51 +87,36 @@
   width: min(100%, 670px);
 }
 
-.login-page__role-group {
+.login-page__demo-accounts {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e3e8de;
+}
+
+.login-page__demo-title {
+  margin-bottom: 4px;
+  color: #6e7e2d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.login-page__demo-copy {
+  margin-bottom: 14px;
+}
+
+.login-page__demo-options {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-.login-page__role-option {
-  position: relative;
-  display: block !important;
-  min-height: 112px;
-  margin: 0 !important;
-  padding: 14px;
-  border: 1px solid #d8dfd1;
-  border-radius: 8px;
-}
-
-.login-page__role-option .ant-radio {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-}
-
-.login-page__role-option > span:last-child {
-  display: flex;
-  width: 100%;
-  margin: 0 !important;
-  justify-content: center;
-}
-
-.login-page__role-content {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  text-align: center;
-}
-
-.login-page__role-content svg {
-  color: #6e7e2d;
-  font-size: 20px;
-}
-
-.login-page__role-content strong {
-  font-size: 15px;
+.login-page__demo-option {
+  height: 44px;
+  border-color: #d8dfd1;
+  color: #465335;
+  font-weight: 600;
 }
 
 @media (max-width: 760px) {
@@ -177,21 +162,8 @@
     margin-bottom: 8px;
   }
 
-  .login-page__role-option {
-    min-height: 86px;
-    padding: 10px;
-  }
-
-  .login-page__role-option .ant-radio {
-    top: 10px;
-    left: 10px;
-  }
-
-  .login-page__role-content {
-    gap: 2px;
-  }
-
-  .login-page__role-content svg {
-    font-size: 17px;
+  .login-page__demo-accounts {
+    margin-top: 16px;
+    padding-top: 16px;
   }
 }

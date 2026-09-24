@@ -1,20 +1,48 @@
-import {
-  CheckCircleOutlined,
-  EuroOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, Form, Input, Radio, Typography } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import { useNavigate } from "react-router";
 import type { LoginFormValues } from "@/types/auth";
 import "./LoginPage.css";
+import { useState } from "react";
+import { useAuth } from "@/auth/AuthContext";
 
 const { Title, Paragraph } = Typography;
 
+const DEMO_ACCOUNTS = [
+  { role: "Employee", email: "employee@test.com", password: "password123" },
+  { role: "Manager", email: "manager@test.com", password: "password123" },
+  { role: "Finance", email: "finance@test.com", password: "password123" },
+] as const;
+
 function LoginPage() {
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
-  function handleFinish({ role }: LoginFormValues) {
-    navigate(`/dashboard?role=${role}`);
+  const [form] = Form.useForm<LoginFormValues>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedDemoRole, setSelectedDemoRole] = useState<string | null>(
+    "Employee",
+  );
+
+  function selectDemoAccount(account: (typeof DEMO_ACCOUNTS)[number]) {
+    form.setFieldsValue({
+      email: account.email,
+      password: account.password,
+    });
+    setSelectedDemoRole(account.role);
+  }
+
+  async function handleFinish(values: LoginFormValues) {
+    setIsSubmitting(true);
+    try {
+      const currentUser = await signIn(values);
+
+      message.success(`Welcome back, ${currentUser.firstName}.`);
+      navigate("/dashboard", { replace: true });
+    } catch {
+      message.error("Sign in failed. Check your email and password.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -49,12 +77,12 @@ function LoginPage() {
           <Paragraph className="login-page__eyebrow">WELCOME BACK</Paragraph>
           <Title level={1}>Sign in to CloudExpense</Title>
           <Paragraph type="secondary">
-            Choose a prototype role to see its tailored workspace.
+            Sign in with your CloudExpense work account.
           </Paragraph>
 
           <Form<LoginFormValues>
+            form={form}
             layout="vertical"
-            initialValues={{ demoRole: "EMPLOYEE" }}
             onFinish={handleFinish}
           >
             <Form.Item
@@ -76,37 +104,39 @@ function LoginPage() {
               <Input.Password size="large" placeholder="Enter your password" />
             </Form.Item>
 
-            <Form.Item label="Explore as" name="demoRole">
-              <Radio.Group className="login-page__role-group">
-                <Radio className="login-page__role-option" value="EMPLOYEE">
-                  <span className="login-page__role-content">
-                    <UserOutlined />
-                    <strong>Employee</strong>
-                    <small>Submit and track</small>
-                  </span>
-                </Radio>
-
-                <Radio className="login-page__role-option" value="MANAGER">
-                  <span className="login-page__role-content">
-                    <CheckCircleOutlined />
-                    <strong>Manager</strong>
-                    <small>Review and approve</small>
-                  </span>
-                </Radio>
-
-                <Radio className="login-page__role-option" value="FINANCE">
-                  <span className="login-page__role-content">
-                    <EuroOutlined />
-                    <strong>Finance</strong>
-                    <small>Control and pay</small>
-                  </span>
-                </Radio>
-              </Radio.Group>
-            </Form.Item>
-
-            <Button block htmlType="submit" size="large" type="primary">
+            <Button
+              block
+              htmlType="submit"
+              loading={isSubmitting}
+              size="large"
+              type="primary"
+            >
               Sign in
             </Button>
+
+            <div className="login-page__demo-accounts">
+              <Paragraph className="login-page__demo-title">
+                DEMO ACCOUNTS
+              </Paragraph>
+              <Paragraph type="secondary" className="login-page__demo-copy">
+                Choose an account to fill in the sign-in details.
+              </Paragraph>
+              <div className="login-page__demo-options">
+                {DEMO_ACCOUNTS.map((account) => (
+                  <Button
+                    aria-pressed={selectedDemoRole === account.role}
+                    className="login-page__demo-option"
+                    key={account.role}
+                    onClick={() => selectDemoAccount(account)}
+                    type={
+                      selectedDemoRole === account.role ? "primary" : "default"
+                    }
+                  >
+                    {account.role}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </Form>
         </section>
       </main>
