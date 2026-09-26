@@ -1,0 +1,162 @@
+.sidebar-brand {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: var(--color-brand-light);
+  color: #29421d;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.brand-name {
+  color: var(--color-text-on-dark);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  margin-top: 2px;
+  color: var(--color-text-muted-on-dark);
+  font-size: 12px;
+}
+
+.app-sidebar .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebar-user {
+  margin-top: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 20px 24px;
+}
+
+.app-sidebar {
+  background: #29421d !important;
+}
+
+.app-sidebar .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-sidebar .ant-menu {
+  background: transparent;
+  border-inline-end: none;
+}
+
+.app-sidebar .ant-menu-item {
+  margin-inline: 12px;
+  width: calc(100% - 24px);
+}
+
+.app-sidebar .ant-menu-dark .ant-menu-item {
+  color: var(--color-text-muted-on-dark);
+}
+
+.app-sidebar .ant-menu-dark .ant-menu-item-selected {
+  background: rgba(138, 155, 69, 0.42);
+  color: #ffffff;
+}
+
+.app-sidebar
+  .ant-menu-dark
+  .ant-menu-item:not(.ant-menu-item-selected):hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-user {
+  margin-top: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 20px 24px;
+
+  border-top: 1px solid rgba(219, 230, 212, 0.2);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--color-brand-light);
+  color: #29421d;
+
+  font-weight: 700;
+}
+
+.user-name {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-role {
+  margin-top: 2px;
+
+  color: var(--color-text-muted-on-dark);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.app-header {
+  height: 64px;
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-content {
+  padding: 40px;
+  background: var(--color-background);
+}
+
+.content-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.app-header .ant-breadcrumb {
+  color: var(--color-text-secondary);
+}
+
+.app-header .ant-breadcrumb li:last-child {
+  color: var(--color-text-primary);
+}

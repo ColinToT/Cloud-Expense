@@ -1,0 +1,21 @@
+:root {
+  /* Brand */
+  --color-brand-dark: #183013;
+  --color-brand: #3d5a2b;
+  --color-brand-accent: #8a9b45;
+  --color-brand-accent-dark: #6e7e2d;
+  --color-brand-light: #c7dc70;
+
+  /* Text */
+  --color-text-primary: #1f2d1a;
+  --color-text-secondary: #707966;
+  --color-text-on-dark: #ffffff;
+  --color-text-muted-on-dark: #dbe6d4;
+
+  /* Surface */
+  --color-surface: #ffffff;
+  --color-background: #f8faf5;
+
+  /* Border */
+  --color-border: #e3e8de;
+}
