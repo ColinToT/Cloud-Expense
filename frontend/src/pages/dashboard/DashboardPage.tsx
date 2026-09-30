@@ -1,31 +1,42 @@
-import { Button, Card, Tag, Typography } from "antd";
-import { useNavigate, useSearchParams } from "react-router";
-import { isUserRole } from "@/types/auth";
+import { useEffect, useState } from "react";
+import { Spin } from "antd";
+import { getDashboard } from "@/api/dashboard";
+import type { DashboardResponse } from "@/types/dashboard";
+import EmployeeDashboard from "./EmployeeDashboard";
+import ManagerDashboard from "./ManagerDashboard";
+import FinanceDashboard from "./FinaceDashboard";
 
-const { Paragraph, Title } = Typography;
+const Dashboard = () => {
+  const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
 
-function DashboardPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const roleValue = searchParams.get("role");
-  const role = isUserRole(roleValue) ? roleValue : "EMPLOYEE";
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        const data = await getDashboard();
+        setDashboard(data);
+      } catch (error) {
+        console.error("Failed to load dashboard", error);
+      }
+    };
 
-  return (
-    <main style={{ padding: 48 }}>
-      <Card style={{ maxWidth: 640 }}>
-        <Title level={1}>Dashboard</Title>
-        <Paragraph>
-          This will become the role-aware CloudExpense workspace.
-        </Paragraph>
+    loadDashboard();
+  }, []);
 
-        <Paragraph>
-          Prototype role: <Tag color="blue">{role}</Tag>
-        </Paragraph>
+  if (!dashboard) {
+    return <Spin />;
+  }
 
-        <Button onClick={() => navigate("/login")}>Back to login</Button>
-      </Card>
-    </main>
-  );
-}
+  if (dashboard.role === "EMPLOYEE") {
+    return <EmployeeDashboard data={dashboard.data} />;
+  }
 
-export default DashboardPage;
+  if (dashboard.role === "MANAGER") {
+    return <ManagerDashboard data={dashboard.data} />;
+  }
+
+  if (dashboard.role === "FINANCE") {
+    return <FinanceDashboard data={dashboard.data} />;
+  }
+};
+
+export default Dashboard;

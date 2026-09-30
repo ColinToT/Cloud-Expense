@@ -1,0 +1,36 @@
+.expense-status {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.expense-status--draft {
+  color: #62685c;
+  background: #eef0eb;
+}
+
+.expense-status--submitted {
+  color: #6d671d;
+  background: #f4f1d7;
+}
+
+.expense-status--manager_approved,
+.expense-status--finance_approved {
+  color: #536a25;
+  background: #e8efcf;
+}
+
+.expense-status--paid {
+  color: #3f642e;
+  background: #e1efd9;
+}
+
+.expense-status--rejected {
+  color: #9b3d38;
+  background: #f8e2df;
+}
