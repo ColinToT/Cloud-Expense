@@ -66,11 +66,6 @@
   font-style: italic;
 }
 
-.dashboard-page button {
-  background: #29421d;
-  color: #ffffff;
-}
-
 .dashboard-main-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);

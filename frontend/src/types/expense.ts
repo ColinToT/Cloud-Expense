@@ -16,3 +16,15 @@ export interface Expense {
   expenseDate: string;
   status: ExpenseStatus;
 }
+
+export interface Receipt {
+  id: number;
+  fileName: string;
+  fileUrl: string;
+  uploadedAt: string;
+}
+
+export interface ExpenseDetail extends Expense {
+  submittedAt: string | null;
+  receipts: Receipt[];
+}

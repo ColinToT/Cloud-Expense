@@ -3,6 +3,8 @@ import LoginPage from "@/pages/login/LoginPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import MainLayout from "@/layouts/MainLayout";
+import Expenses from "./pages/expenses/Expenses";
+import ExpenseDetailPage from "./pages/expenses/ExpenseDetail";
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
         </Route>
       </Route>
 

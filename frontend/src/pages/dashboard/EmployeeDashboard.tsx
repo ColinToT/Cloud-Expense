@@ -143,7 +143,7 @@ const EmployeeDashboard = ({ data }: Props) => {
           <div className="dashboard-panel__header">
             <h2>My expense requests</h2>
 
-            <Button type="link" onClick={() => navigate("/expenses")}>
+            <Button type="primary" onClick={() => navigate("/expenses")}>
               View all
             </Button>
           </div>
