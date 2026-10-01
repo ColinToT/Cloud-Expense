@@ -28,3 +28,21 @@ export interface ExpenseDetail extends Expense {
   submittedAt: string | null;
   receipts: Receipt[];
 }
+
+export interface CreateExpenseRequest {
+  title: string;
+  description?: string;
+  amount: number;
+  currency: string;
+  categoryId: number;
+  expenseDate: string;
+}
+
+export interface UpdateExpenseRequest {
+  title: string;
+  description?: string;
+  amount: number;
+  currency: string;
+  categoryId: number;
+  expenseDate: string;
+}

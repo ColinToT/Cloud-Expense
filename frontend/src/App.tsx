@@ -5,6 +5,8 @@ import ProtectedRoute from "@/routes/ProtectedRoute";
 import MainLayout from "@/layouts/MainLayout";
 import Expenses from "./pages/expenses/Expenses";
 import ExpenseDetailPage from "./pages/expenses/ExpenseDetail";
+import NewExpensePage from "./pages/expenses/NewExpense";
+import EditExpensePage from "./pages/expenses/EditExpense";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
+          <Route path="/expenses/new" element={<NewExpensePage />} />
+          <Route path="/expenses/:id/edit" element={<EditExpensePage />} />
         </Route>
       </Route>
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Button, Spin, message } from "antd";
+import { Modal, Button, Spin, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import "./ExpenseDetail.css";
-import { getExpenseById, submitExpense } from "@/api/expense";
+import { deleteExpense, getExpenseById, submitExpense } from "@/api/expense";
 import type { ExpenseDetail } from "@/types/expense";
 import ExpenseStatusTag from "@/components/ExpenseStatusTag/ExpenseStatusTag";
 import ReceiptSection from "./components/ReceiptSection";
+import { getExpenseCategoryLabel } from "@/constants/expenseCategories";
 
 const ExpenseDetailPage = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const ExpenseDetailPage = () => {
   const isDraft = expense?.status === "DRAFT";
   const hasReceipts = (expense?.receipts.length ?? 0) > 0;
   const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const loadExpense = async () => {
     try {
@@ -64,8 +66,37 @@ const ExpenseDetailPage = () => {
     }
   };
 
-  const handleEdit = () => {};
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    if (!expense) {
+      return;
+    }
+
+    try {
+      setDeleting(true);
+
+      await deleteExpense(expense.id);
+
+      message.success("Expense deleted successfully.");
+
+      navigate("/expenses");
+    } catch {
+      message.error("Failed to delete expense.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    Modal.confirm({
+      title: "Delete this expense?",
+      content:
+        "This action cannot be undone. The expense and its attached receipts will be permanently deleted.",
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: handleDelete,
+    });
+  };
 
   return (
     <div className="expense-detail-page">
@@ -90,9 +121,11 @@ const ExpenseDetailPage = () => {
         {isDraft && (
           <div className="expense-detail__actions">
             <div className="expense-detail__action-buttons">
-              <Button onClick={handleEdit}>Edit</Button>
+              <Button onClick={() => navigate(`/expenses/${expense.id}/edit`)}>
+                Edit
+              </Button>
 
-              <Button danger onClick={handleDelete}>
+              <Button danger loading={deleting} onClick={handleDeleteClick}>
                 Delete
               </Button>
 
@@ -133,7 +166,7 @@ const ExpenseDetailPage = () => {
 
           <div>
             <span>Category</span>
-            <strong>{expense.categoryId}</strong>
+            <strong>{getExpenseCategoryLabel(expense.categoryId)}</strong>
           </div>
 
           <div>
