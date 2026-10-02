@@ -16,3 +16,15 @@ export const uploadReceipt = async (
 
   return response.data;
 };
+
+export const getReceiptFile = async (receiptId: number) => {
+  const response = await http.get(`/receipts/${receiptId}/file`, {
+    responseType: "blob",
+  });
+
+  return response.data;
+};
+
+export const deleteReceipt = async (receiptId: number) => {
+  await http.delete(`/receipts/${receiptId}`);
+};
