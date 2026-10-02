@@ -1,5 +1,6 @@
 package com.cloudexpense.approval.service.impl;
 
+import com.cloudexpense.approval.dto.ApprovalExpenseDetailResponse;
 import com.cloudexpense.approval.dto.ApprovalHistoryResponse;
 import com.cloudexpense.approval.dto.ApprovalRequest;
 import com.cloudexpense.approval.dto.PendingApprovalResponse;
@@ -14,6 +15,9 @@ import com.cloudexpense.common.exception.BusinessException;
 import com.cloudexpense.expense.entity.Expense;
 import com.cloudexpense.expense.entity.ExpenseStatus;
 import com.cloudexpense.expense.repository.ExpenseRepository;
+import com.cloudexpense.receipt.dto.ReceiptResponse;
+import com.cloudexpense.receipt.entity.Receipt;
+import com.cloudexpense.receipt.repository.ReceiptRepository;
 import com.cloudexpense.user.entity.Role;
 import com.cloudexpense.user.entity.User;
 import com.cloudexpense.user.service.CurrentUserService;
@@ -41,6 +45,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final ApprovalRecordRepository approvalRecordRepository;
     private final CurrentUserService currentUserService;
     private final ApplicationEventPublisher eventPublisher;
+    private final ReceiptRepository receiptRepository;
 
     @Override
     public List<PendingApprovalResponse> getPendingExpenses() {
@@ -156,6 +161,23 @@ public class ApprovalServiceImpl implements ApprovalService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ApprovalExpenseDetailResponse getExpenseDetail(Long expenseId) {
+        User approver = currentUserService.getCurrentUser();
+
+        Expense expense = getPendingExpense(expenseId, approver);
+
+        List<ReceiptResponse> receipts =
+                receiptRepository
+                        .findAllByExpenseId(expense.getId())
+                        .stream()
+                        .map(this::toReceiptResponse)
+                        .toList();
+
+        return toExpenseDetailResponse(expense, receipts);
+    }
+
     private ApprovalHistoryResponse toHistoryResponse(ApprovalRecord record) {
         User approver = record.getApprover();
 
@@ -229,6 +251,37 @@ public class ApprovalServiceImpl implements ApprovalService {
                         + " "
                         + employee.getLastName(),
                 expense.getSubmittedAt()
+        );
+    }
+
+    private ReceiptResponse toReceiptResponse(Receipt receipt){
+        return new ReceiptResponse(
+                receipt.getId(),
+                receipt.getFileName(),
+                receipt.getFileUrl(),
+                receipt.getUploadedAt()
+        );
+    }
+
+    private ApprovalExpenseDetailResponse toExpenseDetailResponse(
+            Expense expense,
+            List<ReceiptResponse> receipts
+    ) {
+        User employee = expense.getUser();
+
+        return new ApprovalExpenseDetailResponse(
+                expense.getId(),
+                employee.getFirstName() + " " + employee.getLastName(),
+                employee.getEmail(),
+                expense.getTitle(),
+                expense.getDescription(),
+                expense.getAmount(),
+                expense.getCurrency(),
+                expense.getCategoryId(),
+                expense.getExpenseDate(),
+                expense.getStatus(),
+                expense.getSubmittedAt(),
+                receipts
         );
     }
 }

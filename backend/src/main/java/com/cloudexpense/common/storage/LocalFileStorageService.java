@@ -1,10 +1,13 @@
 package com.cloudexpense.common.storage;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,6 +84,33 @@ public class LocalFileStorageService implements FileStorageService {
         } catch (IOException e) {
             throw new RuntimeException(
                     "File delete failed",
+                    e
+            );
+        }
+    }
+
+    @Override
+    public Resource load(String fileUrl) {
+        try {
+            String filename =
+                    Paths.get(fileUrl)
+                            .getFileName()
+                            .toString();
+
+            Path filePath = storagePath.resolve(filename)
+                    .normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new RuntimeException("File not found");
+            }
+
+            return resource;
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(
+                    "Could not load file",
                     e
             );
         }

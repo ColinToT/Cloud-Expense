@@ -1,6 +1,6 @@
 .expense-detail-page {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -84,4 +84,152 @@
 .expense-detail__submit-hint {
   color: var(--color-text-secondary);
   font-size: 12px;
+}
+
+.approval-history {
+  display: flex;
+  flex-direction: column;
+}
+
+.approval-history__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.approval-history__meta {
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.approval-history__date {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.approval-history__comment {
+  margin-top: 12px;
+  padding: 12px 14px;
+
+  background: var(--color-background);
+  border-radius: 8px;
+
+  color: var(--color-text-primary);
+}
+
+.expense-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(360px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.expense-detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.expense-detail-sidebar {
+  min-width: 0;
+}
+
+.expense-detail-layout .expense-detail-card {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1000px) {
+  .expense-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.approval-history__item {
+  position: relative;
+  padding: 0 0 24px 24px;
+  border-bottom: none;
+}
+
+.approval-history__item::before {
+  position: absolute;
+  top: 6px;
+  left: 0;
+
+  width: 9px;
+  height: 9px;
+
+  background: var(--color-primary);
+  border-radius: 50%;
+
+  content: "";
+}
+
+.approval-history__item::after {
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: 4px;
+
+  width: 2px;
+
+  background: var(--color-border);
+
+  content: "";
+}
+
+.approval-history__item:last-child::after {
+  display: none;
+}
+
+.receipt-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.receipt-section__header h2 {
+  margin-bottom: 0;
+}
+
+.receipt-section__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.receipt-section__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.receipt-section__item:first-child {
+  padding-top: 0;
+}
+
+.receipt-section__item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.receipt-section__file-name {
+  min-width: 0;
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.receipt-section__empty {
+  margin: 0;
+  color: var(--color-text-secondary);
 }

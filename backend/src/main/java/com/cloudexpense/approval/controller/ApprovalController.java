@@ -1,5 +1,6 @@
 package com.cloudexpense.approval.controller;
 
+import com.cloudexpense.approval.dto.ApprovalExpenseDetailResponse;
 import com.cloudexpense.approval.dto.ApprovalHistoryResponse;
 import com.cloudexpense.approval.dto.ApprovalRequest;
 import com.cloudexpense.approval.dto.PendingApprovalResponse;
@@ -25,6 +26,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApprovalController {
     private final ApprovalService approvalService;
+
+    @PreAuthorize("hasAnyRole('MANAGER')")
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<ApprovalExpenseDetailResponse> getDetail(
+            @PathVariable Long expenseId
+    ) {
+        return ResponseEntity.ok(
+                approvalService.getExpenseDetail(expenseId)
+        );
+    }
 
     @PreAuthorize("hasRole('MANAGER') or hasRole('FINANCE')")
     @GetMapping("/pending")

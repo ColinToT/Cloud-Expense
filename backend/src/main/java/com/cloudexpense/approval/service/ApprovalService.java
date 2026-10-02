@@ -1,5 +1,6 @@
 package com.cloudexpense.approval.service;
 
+import com.cloudexpense.approval.dto.ApprovalExpenseDetailResponse;
 import com.cloudexpense.approval.dto.ApprovalHistoryResponse;
 import com.cloudexpense.approval.dto.ApprovalRequest;
 import com.cloudexpense.approval.dto.PendingApprovalResponse;
@@ -23,4 +24,6 @@ public interface ApprovalService {
     void reject(Long expenseId, ApprovalRequest request);
 
     List<ApprovalHistoryResponse> getApprovalHistory(Long expenseId);
+
+    ApprovalExpenseDetailResponse getExpenseDetail(Long expenseId);
 }

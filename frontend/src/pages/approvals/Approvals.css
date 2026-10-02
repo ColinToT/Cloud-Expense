@@ -1,0 +1,36 @@
+.approvals-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.approvals-page__header {
+  margin-bottom: 28px;
+}
+
+.approvals-page__header h1 {
+  margin: 0 0 4px;
+  color: var(--color-text-primary);
+  font-size: 30px;
+}
+
+.approvals-page__header p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.approvals-card {
+  padding: 24px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.approvals-page__loading {
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

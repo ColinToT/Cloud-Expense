@@ -31,13 +31,6 @@ const NewExpensePage = () => {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
-  const categoryOptions = [
-    { value: 1, label: "Meals" },
-    { value: 2, label: "Travel" },
-    { value: 3, label: "Hotel" },
-    { value: 4, label: "Other" },
-  ];
-
   const handleFinish = async (values: ExpenseFormValues) => {
     const request: CreateExpenseRequest = {
       title: values.title,

@@ -1,5 +1,6 @@
 package com.cloudexpense.receipt.service;
 
+import com.cloudexpense.receipt.dto.ReceiptFileResponse;
 import com.cloudexpense.receipt.dto.ReceiptResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +21,6 @@ public interface ReceiptService {
     List<ReceiptResponse> findByExpenseId(Long expenseId);
 
     void delete(Long receiptId);
+
+    ReceiptFileResponse getReceiptFile(Long id);
 }

@@ -7,6 +7,8 @@ import Expenses from "./pages/expenses/Expenses";
 import ExpenseDetailPage from "./pages/expenses/ExpenseDetail";
 import NewExpensePage from "./pages/expenses/NewExpense";
 import EditExpensePage from "./pages/expenses/EditExpense";
+import ApprovalsPage from "./pages/approvals/Approvals";
+import ApprovalDetailPage from "./pages/approvals/ApprovalDetail";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
           <Route path="/expenses/new" element={<NewExpensePage />} />
           <Route path="/expenses/:id/edit" element={<EditExpensePage />} />
+          <Route path="/approvals" element={<ApprovalsPage />} />
+          <Route path="/approvals/:id" element={<ApprovalDetailPage />} />
         </Route>
       </Route>
 

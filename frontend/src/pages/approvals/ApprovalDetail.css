@@ -1,0 +1,134 @@
+.approval-detail-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+.approval-detail__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 20px 0 28px;
+}
+
+.approval-detail__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.approval-detail__title-row h1 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 30px;
+}
+
+.approval-detail__header p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+}
+
+/* Two-column layout */
+
+.approval-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(380px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.approval-detail-main,
+.approval-detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.approval-detail-sidebar {
+  min-width: 0;
+}
+
+/* Card */
+
+.approval-detail-card {
+  padding: 24px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.approval-detail-card h2 {
+  margin: 0 0 24px;
+  color: var(--color-text-primary);
+  font-size: 18px;
+}
+
+/* Expense information */
+
+.approval-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.approval-detail-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.approval-detail-grid span,
+.approval-detail-description > span {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.approval-detail-description {
+  margin-top: 24px;
+}
+
+.approval-detail-description p {
+  margin-bottom: 0;
+}
+
+/* Decision */
+
+/* Decision */
+
+.approval-decision {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.approval-decision__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.approval-decision__field label {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.approval-decision__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.approval-decision__actions .ant-btn {
+  min-width: 88px;
+}
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+  .approval-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

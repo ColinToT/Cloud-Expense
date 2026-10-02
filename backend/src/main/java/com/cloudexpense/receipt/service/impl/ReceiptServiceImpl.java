@@ -1,20 +1,28 @@
 package com.cloudexpense.receipt.service.impl;
 
 import com.cloudexpense.common.exception.BusinessException;
+import com.cloudexpense.common.exception.ResourceNotFoundException;
 import com.cloudexpense.common.storage.FileStorageService;
 import com.cloudexpense.config.FileProperties;
 import com.cloudexpense.expense.entity.Expense;
 import com.cloudexpense.expense.entity.ExpenseStatus;
 import com.cloudexpense.expense.repository.ExpenseRepository;
+import com.cloudexpense.receipt.dto.ReceiptFileResponse;
 import com.cloudexpense.receipt.dto.ReceiptResponse;
 import com.cloudexpense.receipt.entity.Receipt;
 import com.cloudexpense.receipt.repository.ReceiptRepository;
 import com.cloudexpense.receipt.service.ReceiptService;
+import com.cloudexpense.user.entity.Role;
+import com.cloudexpense.user.entity.User;
+import com.cloudexpense.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -34,26 +42,33 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final ExpenseRepository expenseRepository;
     private final FileStorageService fileStorageService;
     private final FileProperties fileProperties;
+    private final CurrentUserService currentUserService;
 
     @Override
     @Transactional
     public ReceiptResponse upload(Long expenseId, MultipartFile file) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
         Expense expense =
-                expenseRepository.findById(expenseId)
+                expenseRepository.findByIdAndDeletedAtIsNull(expenseId)
                         .orElseThrow(
-                                () -> new RuntimeException(
+                                () -> new ResourceNotFoundException(
                                         "Expense not found"
                                 )
                         );
+
+        validateOwner(expense, currentUser);
 
         validateExpenseStatus(expense);
 
         validateFile(file);
 
-        long count = receiptRepository.countByExpenseId(expenseId);
+        long count =
+                receiptRepository.countByExpenseId(expenseId);
 
-        if(count >= fileProperties.getMaxCountPerExpense()){
-            throw new RuntimeException(
+        if (count >= fileProperties.getMaxCountPerExpense()) {
+            throw new BusinessException(
                     "Maximum receipt limit reached"
             );
         }
@@ -70,6 +85,19 @@ public class ReceiptServiceImpl implements ReceiptService {
         return toResponse(saved);
     }
 
+    private void validateOwner(
+            Expense expense,
+            User currentUser
+    ) {
+        if (currentUser.getRole() != Role.EMPLOYEE ||
+                !expense.getUser().getId().equals(currentUser.getId())) {
+
+            throw new BusinessException(
+                    "You cannot modify receipts for this expense"
+            );
+        }
+    }
+
     private void validateExpenseStatus(Expense expense) {
         if(expense.getStatus() != ExpenseStatus.DRAFT &&
                 expense.getStatus() != ExpenseStatus.REJECTED){
@@ -82,6 +110,20 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public List<ReceiptResponse> findByExpenseId(Long expenseId) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        Expense expense =
+                expenseRepository
+                        .findByIdAndDeletedAtIsNull(expenseId)
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException(
+                                        "Expense not found"
+                                )
+                        );
+
+        validateViewPermission(expense, currentUser);
+
         return receiptRepository
                 .findAllByExpenseId(expenseId)
                 .stream()
@@ -91,17 +133,35 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     @Transactional
-    public void delete(Long receiptId) {
+    public void delete(Long id) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
         Receipt receipt =
-                receiptRepository.findById(receiptId)
+                receiptRepository.findById(id)
                         .orElseThrow(
-                                () -> new RuntimeException(
+                                () -> new ResourceNotFoundException(
                                         "Receipt not found"
                                 )
                         );
 
-        fileStorageService.delete(receipt.getFileUrl());
+        Expense expense = receipt.getExpense();
 
+        if (!expense.getUser().getId().equals(currentUser.getId())) {
+            throw new BusinessException(
+                    "You cannot delete this receipt"
+            );
+        }
+
+        if (expense.getStatus() != ExpenseStatus.DRAFT &&
+                expense.getStatus() != ExpenseStatus.REJECTED) {
+
+            throw new BusinessException(
+                    "Receipts can only be deleted from draft or rejected expenses"
+            );
+        }
+
+        fileStorageService.delete(receipt.getFileUrl());
         receiptRepository.delete(receipt);
     }
 
@@ -136,5 +196,91 @@ public class ReceiptServiceImpl implements ReceiptService {
             );
         }
 
+    }
+
+    @Override
+    public ReceiptFileResponse getReceiptFile(Long receiptId) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        Receipt receipt =
+                receiptRepository.findById(receiptId)
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException(
+                                        "Receipt not found"
+                                )
+                        );
+
+        Expense expense = receipt.getExpense();
+
+        validateViewPermission(expense, currentUser);
+
+        Resource resource =
+                fileStorageService.load(receipt.getFileUrl());
+
+        String contentType = getContentType(resource);
+
+        return new ReceiptFileResponse(
+                resource,
+                contentType,
+                receipt.getFileName()
+        );
+    }
+
+    private void validateViewPermission(
+            Expense expense,
+            User currentUser
+    ) {
+        Role role = currentUser.getRole();
+
+        if (role == Role.EMPLOYEE) {
+
+            if (!expense.getUser().getId().equals(currentUser.getId())) {
+                throw new BusinessException(
+                        "You cannot access this receipt"
+                );
+            }
+
+            return;
+        }
+
+        if (role == Role.MANAGER) {
+
+            Long managerId = expense.getUser().getManagerId();
+
+            if (managerId == null ||
+                    !managerId.equals(currentUser.getId())) {
+
+                throw new BusinessException(
+                        "You cannot access this receipt"
+                );
+            }
+
+            return;
+        }
+
+        if (role == Role.FINANCE) {
+            return;
+        }
+
+        throw new BusinessException(
+                "You cannot access this receipt"
+        );
+    }
+
+    private String getContentType(Resource resource) {
+        try {
+            String contentType =
+                    Files.probeContentType(
+                            resource.getFile().toPath()
+                    );
+
+            return contentType != null
+                    ? contentType
+                    : "application/octet-stream";
+
+        } catch (IOException e) {
+            return "application/octet-stream";
+        }
     }
 }

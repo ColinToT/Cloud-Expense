@@ -8,6 +8,8 @@ import type { ExpenseDetail } from "@/types/expense";
 import ExpenseStatusTag from "@/components/ExpenseStatusTag/ExpenseStatusTag";
 import ReceiptSection from "./components/ReceiptSection";
 import { getExpenseCategoryLabel } from "@/constants/expenseCategories";
+import { getApprovalHistory } from "@/api/approval";
+import type { ApprovalHistory } from "@/types/approval";
 
 const ExpenseDetailPage = () => {
   const { id } = useParams();
@@ -15,10 +17,12 @@ const ExpenseDetailPage = () => {
 
   const [expense, setExpense] = useState<ExpenseDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const isDraft = expense?.status === "DRAFT";
+  const isEditable =
+    expense?.status === "DRAFT" || expense?.status === "REJECTED";
   const hasReceipts = (expense?.receipts.length ?? 0) > 0;
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [approvalHistory, setApprovalHistory] = useState<ApprovalHistory[]>([]);
 
   const loadExpense = async () => {
     try {
@@ -31,12 +35,22 @@ const ExpenseDetailPage = () => {
     }
   };
 
+  const loadApprovalHistory = async (expenseId: number) => {
+    try {
+      const data = await getApprovalHistory(expenseId);
+      setApprovalHistory(data);
+    } catch {
+      message.error("Failed to load approval history.");
+    }
+  };
+
   useEffect(() => {
     if (!id) {
       return;
     }
-
+    const expenseId = Number(id);
     loadExpense();
+    loadApprovalHistory(expenseId);
   }, [id]);
 
   if (loading) {
@@ -118,7 +132,7 @@ const ExpenseDetailPage = () => {
           <p>Review the details of this expense request.</p>
         </div>
 
-        {isDraft && (
+        {isEditable && (
           <div className="expense-detail__actions">
             <div className="expense-detail__action-buttons">
               <Button onClick={() => navigate(`/expenses/${expense.id}/edit`)}>
@@ -148,45 +162,93 @@ const ExpenseDetailPage = () => {
         )}
       </div>
 
-      <div className="expense-detail-card">
-        <h2>Expense information</h2>
+      <div className="expense-detail-layout">
+        <div className="expense-detail-main">
+          <div className="expense-detail-card">
+            <h2>Expense information</h2>
 
-        <div className="expense-detail-grid">
-          <div>
-            <span>Amount</span>
-            <strong>
-              {expense.currency} {expense.amount.toFixed(2)}
-            </strong>
+            <div className="expense-detail-grid">
+              <div>
+                <span>Amount</span>
+                <strong>
+                  {expense.currency} {expense.amount.toFixed(2)}
+                </strong>
+              </div>
+
+              <div>
+                <span>Expense date</span>
+                <strong>{expense.expenseDate}</strong>
+              </div>
+
+              <div>
+                <span>Category</span>
+                <strong>{getExpenseCategoryLabel(expense.categoryId)}</strong>
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong>{expense.status}</strong>
+              </div>
+            </div>
+
+            <div className="expense-detail-description">
+              <span>Description</span>
+              <p>{expense.description || "No description provided."}</p>
+            </div>
           </div>
 
-          <div>
-            <span>Expense date</span>
-            <strong>{expense.expenseDate}</strong>
-          </div>
-
-          <div>
-            <span>Category</span>
-            <strong>{getExpenseCategoryLabel(expense.categoryId)}</strong>
-          </div>
-
-          <div>
-            <span>Status</span>
-            <strong>{expense.status}</strong>
-          </div>
+          <ReceiptSection
+            expenseId={expense.id}
+            receipts={expense.receipts}
+            editable={isEditable}
+            onReceiptChanged={loadExpense}
+          />
         </div>
 
-        <div className="expense-detail-description">
-          <span>Description</span>
-          <p>{expense.description || "No description provided."}</p>
-        </div>
+        <aside className="expense-detail-sidebar">
+          {approvalHistory.length > 0 && (
+            <section className="expense-detail-card">
+              <h2>Approval history</h2>
+
+              <div className="approval-history">
+                {approvalHistory.map((record, index) => (
+                  <div
+                    className="approval-history__item"
+                    key={`${record.stage}-${record.createdAt}-${index}`}
+                  >
+                    <div className="approval-history__header">
+                      <div>
+                        <strong>
+                          {record.stage === "MANAGER"
+                            ? "Manager review"
+                            : "Finance review"}
+                        </strong>
+
+                        <div className="approval-history__meta">
+                          {record.action === "APPROVE"
+                            ? "Approved"
+                            : "Rejected"}{" "}
+                          by {record.approverName}
+                        </div>
+                      </div>
+
+                      <span className="approval-history__date">
+                        {new Date(record.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+
+                    {record.comment && (
+                      <div className="approval-history__comment">
+                        {record.comment}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </aside>
       </div>
-
-      <ReceiptSection
-        expenseId={expense.id}
-        receipts={expense.receipts}
-        editable={isDraft}
-        onReceiptChanged={loadExpense}
-      />
     </div>
   );
 };
