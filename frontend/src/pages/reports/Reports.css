@@ -1,0 +1,78 @@
+.reports-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.reports-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+.reports-header h1 {
+  margin: 0 0 6px;
+
+  color: var(--color-text-primary);
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.reports-header p {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+  font-size: 15px;
+}
+
+.reports-filter-card,
+.reports-table-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.reports-filter-card {
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.reports-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reports-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reports-filter label {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reports-filter .ant-picker {
+  width: 280px;
+}
+
+.reports-filter .ant-select {
+  width: 220px;
+}
+
+.reports-filter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reports-table-card {
+  overflow: hidden;
+  padding: 20px 24px;
+}

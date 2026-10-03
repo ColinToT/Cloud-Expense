@@ -13,6 +13,7 @@ import FinanceExpenses from "./pages/finance/FinanceExpenses";
 import FinanceExpenseDetail from "./pages/finance/FinanceExpenseDetail";
 import Payments from "./pages/finance/Payments";
 import Notifications from "./pages/notifications/Notifications";
+import Reports from "./pages/reports/Reports";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           />
           <Route path="/payments" element={<Payments />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/reports" element={<Reports />} />
         </Route>
       </Route>
 

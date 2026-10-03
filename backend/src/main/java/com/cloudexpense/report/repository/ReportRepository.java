@@ -39,12 +39,12 @@ public interface ReportRepository extends Repository<Expense, Long> {
                     where e.deleted_at is null
                     and e.user_id=:userId
                     and (
-                    :startDate is null
-                    or e.expense_date>=:startDate
+                        cast(:startDate as date) is null
+                        or e.expense_date >= cast(:startDate as date)
                     )
                     and (
-                    :endDate is null
-                    or e.expense_date<=:endDate
+                        cast(:endDate as date) is null
+                        or e.expense_date <= cast(:endDate as date)
                     )
                     and (
                     :status is null
@@ -82,12 +82,12 @@ public interface ReportRepository extends Repository<Expense, Long> {
                     where e.deleted_at is null
                     and u.manager_id=:managerId
                     and (
-                    :startDate is null
-                    or e.expense_date>=:startDate
+                        cast(:startDate as date) is null
+                        or e.expense_date >= cast(:startDate as date)
                     )
                     and (
-                    :endDate is null
-                    or e.expense_date<=:endDate
+                        cast(:endDate as date) is null
+                        or e.expense_date <= cast(:endDate as date)
                     )
                     and (
                     :status is null
@@ -124,12 +124,12 @@ public interface ReportRepository extends Repository<Expense, Long> {
                     on u.id=e.user_id
                     where e.deleted_at is null
                     and (
-                    :startDate is null
-                    or e.expense_date>=:startDate
+                        cast(:startDate as date) is null
+                        or e.expense_date >= cast(:startDate as date)
                     )
                     and (
-                    :endDate is null
-                    or e.expense_date<=:endDate
+                        cast(:endDate as date) is null
+                        or e.expense_date <= cast(:endDate as date)
                     )
                     and (
                     :status is null
