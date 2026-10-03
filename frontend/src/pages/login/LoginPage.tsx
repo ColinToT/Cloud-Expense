@@ -83,6 +83,10 @@ function LoginPage() {
           <Form<LoginFormValues>
             form={form}
             layout="vertical"
+            initialValues={{
+              email: DEMO_ACCOUNTS[0].email,
+              password: DEMO_ACCOUNTS[0].password,
+            }}
             onFinish={handleFinish}
           >
             <Form.Item
