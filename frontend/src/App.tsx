@@ -14,6 +14,7 @@ import FinanceExpenseDetail from "./pages/finance/FinanceExpenseDetail";
 import Payments from "./pages/finance/Payments";
 import Notifications from "./pages/notifications/Notifications";
 import Reports from "./pages/reports/Reports";
+import NotFound from "./pages/not-found/NotFound";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
       </Route>
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
