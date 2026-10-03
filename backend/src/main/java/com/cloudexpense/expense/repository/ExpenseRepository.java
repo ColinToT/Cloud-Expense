@@ -39,4 +39,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findByDeletedAtIsNullOrderByCreatedAtDesc();
 
     Optional<Expense> findByIdAndDeletedAtIsNull(Long id);
+
+    List<Expense> findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(
+            ExpenseStatus status
+    );
 }

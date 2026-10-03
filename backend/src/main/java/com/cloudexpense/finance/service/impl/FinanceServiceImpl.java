@@ -5,6 +5,7 @@ import com.cloudexpense.approval.entity.ApprovalRecord;
 import com.cloudexpense.approval.repository.ApprovalRecordRepository;
 import com.cloudexpense.common.exception.ResourceNotFoundException;
 import com.cloudexpense.expense.entity.Expense;
+import com.cloudexpense.expense.entity.ExpenseStatus;
 import com.cloudexpense.expense.repository.ExpenseRepository;
 import com.cloudexpense.finance.dto.FinanceExpenseDetailResponse;
 import com.cloudexpense.finance.dto.FinanceExpenseResponse;
@@ -38,7 +39,9 @@ public class FinanceServiceImpl implements FinanceService {
     @Override
     public List<FinanceExpenseResponse> getExpenses() {
         return expenseRepository
-                .findByDeletedAtIsNullOrderByCreatedAtDesc()
+                .findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(
+                        ExpenseStatus.MANAGER_APPROVED
+                )
                 .stream()
                 .map(this::toResponse)
                 .toList();

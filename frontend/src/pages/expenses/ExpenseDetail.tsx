@@ -10,6 +10,7 @@ import ReceiptSection from "./components/ReceiptSection";
 import { getExpenseCategoryLabel } from "@/constants/expenseCategories";
 import { getApprovalHistory } from "@/api/approval";
 import type { ApprovalHistory } from "@/types/approval";
+import ApprovalHistorySection from "@/components/ApprovalHistory/ApprovalHistorySection";
 
 const ExpenseDetailPage = () => {
   const { id } = useParams();
@@ -206,47 +207,7 @@ const ExpenseDetailPage = () => {
         </div>
 
         <aside className="expense-detail-sidebar">
-          {approvalHistory.length > 0 && (
-            <section className="expense-detail-card">
-              <h2>Approval history</h2>
-
-              <div className="approval-history">
-                {approvalHistory.map((record, index) => (
-                  <div
-                    className="approval-history__item"
-                    key={`${record.stage}-${record.createdAt}-${index}`}
-                  >
-                    <div className="approval-history__header">
-                      <div>
-                        <strong>
-                          {record.stage === "MANAGER"
-                            ? "Manager review"
-                            : "Finance review"}
-                        </strong>
-
-                        <div className="approval-history__meta">
-                          {record.action === "APPROVE"
-                            ? "Approved"
-                            : "Rejected"}{" "}
-                          by {record.approverName}
-                        </div>
-                      </div>
-
-                      <span className="approval-history__date">
-                        {new Date(record.createdAt).toLocaleString()}
-                      </span>
-                    </div>
-
-                    {record.comment && (
-                      <div className="approval-history__comment">
-                        {record.comment}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          <ApprovalHistorySection history={approvalHistory} />
         </aside>
       </div>
     </div>

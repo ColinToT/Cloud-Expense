@@ -9,6 +9,9 @@ import NewExpensePage from "./pages/expenses/NewExpense";
 import EditExpensePage from "./pages/expenses/EditExpense";
 import ApprovalsPage from "./pages/approvals/Approvals";
 import ApprovalDetailPage from "./pages/approvals/ApprovalDetail";
+import FinanceExpenses from "./pages/finance/FinanceExpenses";
+import FinanceExpenseDetail from "./pages/finance/FinanceExpenseDetail";
+import Payments from "./pages/finance/Payments";
 
 function App() {
   return (
@@ -23,6 +26,15 @@ function App() {
           <Route path="/expenses/:id/edit" element={<EditExpensePage />} />
           <Route path="/approvals" element={<ApprovalsPage />} />
           <Route path="/approvals/:id" element={<ApprovalDetailPage />} />
+          <Route path="/finance/expenses" element={<FinanceExpenses />} />
+          <Route
+            path="/finance/expenses/:id"
+            element={<FinanceExpenseDetail />}
+          />
+          <Route
+            path="/payments"
+            element={<Payments />}
+          />
         </Route>
       </Route>
 
