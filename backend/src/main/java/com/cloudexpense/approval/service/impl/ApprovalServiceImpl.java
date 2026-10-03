@@ -100,7 +100,8 @@ public class ApprovalServiceImpl implements ApprovalService {
         eventPublisher.publishEvent(
                 new ExpenseApprovedEvent(
                         expense.getId(),
-                        expense.getUser().getId()
+                        expense.getUser().getId(),
+                        stage
                 )
         );
     }

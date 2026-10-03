@@ -1,5 +1,7 @@
 package com.cloudexpense.common.event;
 
+import com.cloudexpense.approval.entity.ApprovalStage;
+
 /**
  * ClassName: ExpenseApprovedEvent
  * Package: com.cloudexpense.common.event
@@ -13,7 +15,9 @@ public record ExpenseApprovedEvent(
 
         Long expenseId,
 
-        Long employeeId
+        Long employeeId,
+
+        ApprovalStage stage
 
 ) {
 }

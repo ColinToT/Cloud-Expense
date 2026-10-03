@@ -1,0 +1,133 @@
+.notifications-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.notifications-header {
+  margin-bottom: 24px;
+}
+
+.notifications-header h1 {
+  margin: 0 0 6px;
+
+  color: var(--color-text-primary);
+}
+
+.notifications-header p {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+}
+
+/* Notification list container */
+.notifications-card {
+  overflow: hidden;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+/* Individual notification */
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  width: 100%;
+  padding: 18px 20px;
+
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+
+  color: inherit;
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background: var(--color-background);
+}
+
+/* Unread notification */
+.notification-item--unread {
+  background: rgba(0, 0, 0, 0.018);
+}
+
+/* Unread indicator */
+.notification-item__indicator {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  margin-top: 7px;
+  background: transparent;
+  border-radius: 50%;
+}
+
+.notification-item--unread .notification-item__indicator {
+  background: #ff4d4f;
+}
+
+/* Main notification content */
+.notification-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-item__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.notification-item__header strong {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.notification-item--unread .notification-item__header strong {
+  font-weight: 600;
+}
+
+.notification-item__header > span {
+  flex-shrink: 0;
+
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.notification-item__content p {
+  margin: 5px 0 0;
+
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Ant Design empty state */
+.notifications-card .ant-empty {
+  margin: 64px 0;
+}
+
+@media (max-width: 700px) {
+  .notification-item {
+    padding: 16px;
+  }
+
+  .notification-item__header {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

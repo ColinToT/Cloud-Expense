@@ -4,7 +4,7 @@ import { useAuth } from "@/auth/AuthContext";
 import { menuConfig } from "@/layouts/menuConfig";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { getUnreadNotificationCount } from "@/api/noitfication";
+import { getUnreadNotificationCount } from "@/api/notification";
 import "./MainLayout.css";
 
 const { Sider, Header, Content } = Layout;
@@ -26,7 +26,7 @@ const Mainlayout = () => {
       }
     };
     loadUnreadCount();
-  }, []);
+  }, [location.pathname]);
 
   const selectedMenuItem = menuItems.find(
     (item) => item.path === location.pathname,
@@ -104,6 +104,7 @@ const Mainlayout = () => {
                 type="text"
                 icon={<BellOutlined />}
                 className="notification-button"
+                onClick={() => navigate("/notifications")}
               />
             </Badge>
 

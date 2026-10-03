@@ -4,7 +4,7 @@ import { getDashboard } from "@/api/dashboard";
 import type { DashboardResponse } from "@/types/dashboard";
 import EmployeeDashboard from "./EmployeeDashboard";
 import ManagerDashboard from "./ManagerDashboard";
-import FinanceDashboard from "./FinaceDashboard";
+import FinanceDashboard from "./FinanceDashboard";
 
 const Dashboard = () => {
   const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);

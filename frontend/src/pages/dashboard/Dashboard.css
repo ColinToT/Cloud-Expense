@@ -140,3 +140,28 @@
   color: var(--color-text-secondary);
   font-size: 13px;
 }
+
+.dashboard-stats--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-stat-card__amount {
+  margin: -2px 0 8px;
+
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dashboard-finance-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
