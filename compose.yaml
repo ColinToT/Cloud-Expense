@@ -6,7 +6,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m"
     ports:
       - "5433:5432"
     volumes:
@@ -21,6 +20,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m"
     ports:
       - "8080:8080"
     volumes:
