@@ -1,10 +1,12 @@
 services:
   postgres:
     image: postgres:17
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m"
     ports:
       - "5433:5432"
     volumes:
@@ -13,6 +15,7 @@ services:
   backend:
     build:
       context: ./backend
+    restart: unless-stopped
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
@@ -28,6 +31,7 @@ services:
   frontend:
     build:
       context: ./frontend
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
