@@ -6,8 +6,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -21,8 +19,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m"
-    ports:
-      - "8080:8080"
     volumes:
       - receipt_uploads:/app/uploads
     depends_on:
