@@ -81,6 +81,7 @@ public interface ReportRepository extends Repository<Expense, Long> {
                     on u.id=e.user_id
                     where e.deleted_at is null
                     and u.manager_id=:managerId
+                    and e.status <> 'DRAFT'::expense_status
                     and (
                         cast(:startDate as date) is null
                         or e.expense_date >= cast(:startDate as date)
@@ -123,6 +124,11 @@ public interface ReportRepository extends Repository<Expense, Long> {
                     join users u
                     on u.id=e.user_id
                     where e.deleted_at is null
+                    and e.status in (
+                        'MANAGER_APPROVED'::expense_status,
+                        'FINANCE_APPROVED'::expense_status,
+                        'PAID'::expense_status
+                    )
                     and (
                         cast(:startDate as date) is null
                         or e.expense_date >= cast(:startDate as date)
